@@ -7,6 +7,10 @@ on:
     - ci
   pull_request:
 
+permissions:
+  contents: write
+  pull-requests: read
+
 env:
   artifact: EsnyaResoniteModTemplate.dll
 
