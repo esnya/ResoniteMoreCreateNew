@@ -12,7 +12,7 @@ changelog:
     - title: ⚡️ Performance Improvements
       labels:
       - performance
-    - title: 🗒️ Documentations
+    - title: 🗒️ Documentation
       labels:
       - documentation
     - title: 💄 UI Styles
