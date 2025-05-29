@@ -9,7 +9,7 @@ changelog:
     - title: 🐛 Bug Fixes
       labels:
       - bug
-    - title: ⚡️ Performance Improvments
+    - title: ⚡️ Performance Improvements
       labels:
       - performance
     - title: 🗒️ Documentations
