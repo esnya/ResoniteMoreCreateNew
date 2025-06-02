@@ -9,9 +9,8 @@
     <PackageLicenseExpression>MIT</PackageLicenseExpression>
     <Copyright>Copyright (c) 2025 $(Authors)</Copyright>
     <PackageTags>Resonite,Mod,ResoniteModLoader</PackageTags>
-    <Version>0.1.0</Version>
+    <Version>0.2.0</Version>
   </PropertyGroup>
-
   <!-- Build Properties -->
   <PropertyGroup>
     <TargetFramework>net472</TargetFramework>
@@ -29,26 +28,29 @@
     <CopyLocalLockFileAssemblies>false</CopyLocalLockFileAssemblies>
     <AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
   </PropertyGroup>
-
   <!-- Resonite Path Discovery -->
   <PropertyGroup Condition="'$(ResonitePath)'==''">
     <!-- Default to local folder -->
     <ResonitePath>$([System.IO.Path]::Combine('$(MSBuildThisFileDirectory)', 'Resonite'))</ResonitePath>
     <!-- Windows Steam path -->
-    <ResonitePath Condition="'$(OS)'=='Windows_NT' AND Exists('C:\Program Files (x86)\Steam\steamapps\common\Resonite\')"
-      >C:\Program Files (x86)\Steam\steamapps\common\Resonite</ResonitePath>
+    <ResonitePath
+      Condition="'$(OS)'=='Windows_NT' AND Exists('C:\Program Files (x86)\Steam\steamapps\common\Resonite\')"
+      >C:\Program Files (x86)\Steam\steamapps\common\Resonite</ResonitePath
+    >
     <!-- Linux Steam path -->
-    <ResonitePath Condition="'$(OS)'!='Windows_NT' AND Exists('$(USERPROFILE)\.steam\steam\steamapps\common\Resonite\')"
-      >$(USERPROFILE)\.steam\steam\steamapps\common\Resonite</ResonitePath>
-    <ResonitePath Condition="'$(OS)'!='Windows_NT' AND Exists('$(HOME)/.steam/steam/steamapps/common/Resonite/')"
-      >$(HOME)/.steam/steam/steamapps/common/Resonite</ResonitePath>
+    <ResonitePath
+      Condition="'$(OS)'!='Windows_NT' AND Exists('$(USERPROFILE)\.steam\steam\steamapps\common\Resonite\')"
+      >$(USERPROFILE)\.steam\steam\steamapps\common\Resonite</ResonitePath
+    >
+    <ResonitePath
+      Condition="'$(OS)'!='Windows_NT' AND Exists('$(HOME)/.steam/steam/steamapps/common/Resonite/')"
+      >$(HOME)/.steam/steam/steamapps/common/Resonite</ResonitePath
+    >
   </PropertyGroup>
-
   <!-- Normalize ResonitePath -->
   <PropertyGroup>
     <ResonitePath>$([MSBuild]::EnsureTrailingSlash('$(ResonitePath)'))</ResonitePath>
   </PropertyGroup>
-
   <!-- Derived Resonite Paths -->
   <PropertyGroup>
     <ResoniteManagedPath>$([System.IO.Path]::Combine('$(ResonitePath)', 'Resonite_Data', 'Managed'))</ResoniteManagedPath>
@@ -56,7 +58,6 @@
     <ResoniteHotReloadPath>$([System.IO.Path]::Combine('$(ResonitePath)', 'rml_mods', 'HotReloadMods'))</ResoniteHotReloadPath>
     <ResoniteLibsPath>$([System.IO.Path]::Combine('$(ResonitePath)', 'rml_libs'))</ResoniteLibsPath>
   </PropertyGroup>
-
   <!-- Resonite References -->
   <ItemGroup>
     <Reference Include="ResoniteModLoader">
