@@ -21,6 +21,7 @@ internal static class ExtraMesh
         new ExtraMesh<ArrowMesh>(),
         new ExtraMesh<BallisticPathMesh>(),
         new ExtraMesh<BentTubeMesh>(),
+        new ExtraMesh<BevelBoxMesh>(),
         new ExtraMesh<BezierTubeMesh>(),
         new ExtraMesh<BoxArrayMesh>(),
         // new ExtraMesh<BoxMesh>(),
