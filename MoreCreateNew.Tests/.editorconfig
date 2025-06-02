@@ -1,0 +1,29 @@
+root = false
+
+[*.cs]
+# Missing XML comment for publicly visible type or member
+dotnet_diagnostic.CS1591.severity = none
+
+# Allow underscores in test method names (common convention)
+dotnet_diagnostic.CA1707.severity = none
+
+# Test assemblies can be missing documentation
+dotnet_diagnostic.SA1652.severity = none
+
+# Allow unused using directives (common in test projects due to global usings)
+# dotnet_diagnostic.IDE0005.severity = suggestion
+
+# Test files can have multiple classes
+dotnet_diagnostic.SA1402.severity = none
+
+# Allow non-readonly fields in test classes
+dotnet_diagnostic.CA2211.severity = none
+
+# Allow public fields in test classes
+dotnet_diagnostic.CA1051.severity = none
+
+# Test methods don't need to be async when using Assert
+dotnet_diagnostic.VSTHRD200.severity = none
+
+# Allow test methods to not have return values
+# dotnet_diagnostic.CA1806.severity = none

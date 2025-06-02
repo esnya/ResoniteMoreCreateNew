@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
+using System.Runtime.CompilerServices;
 using Elements.Core;
 using FrooxEngine;
 using HarmonyLib;
@@ -10,6 +11,8 @@ using ResoniteModLoader;
 #if DEBUG
 using ResoniteHotReloadLib;
 #endif
+
+[assembly: InternalsVisibleTo("MoreCreateNew.Tests")]
 
 namespace MoreCreateNew;
 
@@ -29,8 +32,17 @@ public class MoreCreateNewMod : ResoniteMod
         assembly.GetCustomAttribute<AssemblyCompanyAttribute>().Company;
 
     /// <inheritdoc />
-    public override string Version =>
-        assembly.GetCustomAttribute<AssemblyInformationalVersionAttribute>().InformationalVersion;
+    public override string Version
+    {
+        get
+        {
+            var fullVersion = assembly.GetCustomAttribute<AssemblyInformationalVersionAttribute>().InformationalVersion;
+
+            var plus = fullVersion.IndexOf('+');
+
+            return plus >= 0 ? fullVersion.Substring(0, plus) : fullVersion;
+        }
+    }
 
     /// <inheritdoc />
     public override string Link =>

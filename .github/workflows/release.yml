@@ -52,6 +52,11 @@ jobs:
         dotnet restore
         dotnet build ${{ env.project_path }} --configuration Release --output ${{ github.workspace }}/${{ env.project_path }}/bin/Release/net472
 
+    - name: Test RML mod
+      shell: pwsh
+      run: |
+        dotnet test --configuration Release
+
     - name: Upload build artifacts
       uses: actions/upload-artifact@v4
       with:

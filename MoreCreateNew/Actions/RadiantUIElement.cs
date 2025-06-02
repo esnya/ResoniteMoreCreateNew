@@ -238,15 +238,21 @@ internal sealed class RadiantUIElement : ISpawn
                 )
         ),
         new(
+            "RectMesh<AudioSourceWaveform>",
             sq512,
             (UIBuilder uiBuilder, string label) =>
                 uiBuilder.RectMesh<AudioSourceWaveformMesh>(null!)
         ),
         new(
+            "RectMesh<AudioSourceXY>",
             sq512,
             (UIBuilder uiBuilder, string label) => uiBuilder.RectMesh<AudioSourceXYMesh>(null!)
         ),
-        new(sq512, (UIBuilder uiBuilder, string label) => uiBuilder.RectMesh<LineGraphMesh>(null!)),
+        new(
+            "RectMesh<LineGraph>",
+            sq512,
+            (UIBuilder uiBuilder, string label) => uiBuilder.RectMesh<LineGraphMesh>(null!)
+        ),
         new(sq512, (UIBuilder uiBuilder, string label) => uiBuilder.ScrollArea(null)),
         new(
             "Slider<int>",

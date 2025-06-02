@@ -1,3 +1,5 @@
+using System;
+using System.Linq;
 using FrooxEngine;
 
 namespace MoreCreateNew.Actions;
@@ -6,7 +8,48 @@ internal sealed class ExtraMesh<T> : ISpawn
     where T : ProceduralMesh
 {
     public string Category => "3DModel/Others";
-    public string Label { get; private set; } = typeof(T).Name.Replace("Mesh", "");
+    public string Label { get; private set; } = GenerateLabel();
+
+    private static string GenerateLabel()
+    {
+        var type = typeof(T);
+        var name = type.Name;
+
+        // Remove "Mesh" suffix
+        if (name.EndsWith("Mesh", StringComparison.Ordinal))
+        {
+            name = name.Substring(0, name.Length - 4);
+        }
+
+        // Handle generic types
+        if (type.IsGenericType)
+        {
+            // Remove generic type parameter count (e.g., "`1")
+            var backtickIndex = name.IndexOf('`');
+            if (backtickIndex >= 0)
+            {
+                name = name.Substring(0, backtickIndex);
+            }
+
+            // Add type arguments
+            var args = type.GetGenericArguments();
+            if (args.Length > 0)
+            {
+                var argNames = args.Select(arg =>
+                {
+                    var argName = arg.Name;
+                    if (argName.EndsWith("Mesh", StringComparison.Ordinal))
+                    {
+                        argName = argName.Substring(0, argName.Length - 4);
+                    }
+                    return argName;
+                });
+                name += "<" + string.Join(",", argNames) + ">";
+            }
+        }
+
+        return name;
+    }
 
     public void Spawn(Slot slot)
     {

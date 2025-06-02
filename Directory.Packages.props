@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project>
+  <!-- Enable Central Package Management -->
+  <PropertyGroup>
+    <ManagePackageVersionsCentrally>true</ManagePackageVersionsCentrally>
+    <CentralPackageTransitivePinningEnabled>true</CentralPackageTransitivePinningEnabled>
+  </PropertyGroup>
+  <!-- Test Framework Packages (newer versions for better compatibility) -->
+  <ItemGroup>
+    <PackageVersion Include="Microsoft.NET.Test.Sdk" Version="17.13.0" />
+    <PackageVersion Include="xunit.v3" Version="2.0.2" />
+    <PackageVersion Include="xunit.v3.runner.inproc.console" Version="2.0.2" />
+    <PackageVersion Include="xunit.runner.visualstudio" Version="3.1.0" />
+    <PackageVersion Include="Microsoft.Testing.Platform" Version="1.7.1" />
+    <PackageVersion Include="xunit.runner.msbuild" Version="2.9.3" />
+    <PackageVersion Include="coverlet.collector" Version="6.0.0" />
+    <PackageVersion Include="coverlet.msbuild" Version="6.0.0" />
+    <PackageVersion Include="Moq" Version="4.20.70" />
+    <PackageVersion Include="FluentAssertions" Version="6.12.0" />
+    <PackageVersion Include="AutoFixture" Version="4.18.1" />
+    <PackageVersion Include="AutoFixture.Xunit2" Version="4.18.1" />
+    <PackageVersion Include="AutoFixture.AutoMoq" Version="4.18.1" />
+    <PackageVersion Include="Microsoft.CodeCoverage" Version="17.14.0" />
+    <PackageVersion Include="Microsoft.TestPlatform.TestHost" Version="17.14.0" />
+  </ItemGroup>
+  <!-- System Package Version Overrides (to match Resonite dependencies) -->
+  <ItemGroup>
+    <PackageVersion Include="Microsoft.Bcl.AsyncInterfaces" Version="9.0.0" />
+    <PackageVersion Include="System.Buffers" Version="4.6.1" />
+    <PackageVersion Include="System.Memory" Version="4.6.1" />
+    <PackageVersion Include="System.Numerics.Vectors" Version="4.6.1" />
+    <PackageVersion Include="System.Runtime.CompilerServices.Unsafe" Version="6.1.1" />
+    <PackageVersion Include="System.Text.Json" Version="8.0.0" />
+    <PackageVersion Include="System.Threading.Tasks.Extensions" Version="4.6.0" />
+    <PackageVersion Include="System.ValueTuple" Version="4.5.0" />
+  </ItemGroup>
+  <!-- Code Quality & Analysis Packages -->
+  <ItemGroup>
+    <PackageVersion Include="ReportGenerator" Version="5.3.11" />
+    <PackageVersion Include="Microsoft.CodeAnalysis.Analyzers" Version="3.11.0" />
+    <PackageVersion Include="Microsoft.CodeAnalysis.NetAnalyzers" Version="8.0.0" />
+  </ItemGroup>
+  <!-- Development Tools -->
+  <ItemGroup>
+    <PackageVersion Include="Bogus" Version="35.6.1" />
+  </ItemGroup>
+</Project>
