@@ -1,7 +1,8 @@
-using Elements.Core;
-using ResoniteModLoader;
 using System.Linq;
 using System.Reflection;
+using HarmonyLib;
+using ResoniteModLoader;
+using Elements.Core;
 using FrooxEngine;
 using System.Collections.Generic;
 using System;
@@ -13,21 +14,38 @@ using ResoniteHotReloadLib;
 
 namespace MoreCreateNew;
 
-public partial class MoreCreateNewMod : ResoniteMod
+/// <summary>
+/// Represents the main mod class for MoreCreateNew.
+/// Provides additional create new options for Resonite.
+/// </summary>
+public class MoreCreateNewMod : ResoniteMod
 {
-    private static Assembly ModAssembly => typeof(MoreCreateNewMod).Assembly;
+    private static readonly Assembly Assembly = typeof(MoreCreateNewMod).Assembly;
 
-    public override string Name => ModAssembly.GetCustomAttribute<AssemblyTitleAttribute>().Title;
-    public override string Author => ModAssembly.GetCustomAttribute<AssemblyCompanyAttribute>().Company;
-    public override string Version => ModAssembly.GetCustomAttribute<AssemblyInformationalVersionAttribute>().InformationalVersion;
-    public override string Link => ModAssembly.GetCustomAttributes<AssemblyMetadataAttribute>().First(meta => meta.Key == "RepositoryUrl").Value;
+    /// <inheritdoc />
+    public override string Name => Assembly.GetCustomAttribute<AssemblyTitleAttribute>().Title;
 
-    internal static string HarmonyId => $"com.nekometer.esnya.{ModAssembly.GetName()}";
+    /// <inheritdoc />
+    public override string Author =>
+        Assembly.GetCustomAttribute<AssemblyCompanyAttribute>().Company;
 
+    /// <inheritdoc />
+    public override string Version =>
+        Assembly.GetCustomAttribute<AssemblyInformationalVersionAttribute>().InformationalVersion;
 
+    /// <inheritdoc />
+    public override string Link =>
+        Assembly
+            .GetCustomAttributes<AssemblyMetadataAttribute>()
+            .FirstOrDefault(meta => meta.Key == "RepositoryUrl")
+            ?.Value ?? string.Empty;
+
+    private static string HarmonyId => $"com.nekometer.esnya.{Assembly.GetName().Name}";
+
+    private static readonly Harmony harmony = new(HarmonyId);
     private static readonly List<KeyValuePair<string, string>> menuItems = new(SmallMesh.Actions.Length + ExtraMesh.Actions.Length + RadiantUIElement.Actions.Length);
 
-
+    /// <inheritdoc />
     public override void OnEngineInit()
     {
         Init(this);
@@ -37,21 +55,32 @@ public partial class MoreCreateNewMod : ResoniteMod
 #endif
     }
 
-    private static void AddAction(string path, string name, Action<Slot> action)
+    /// <summary>
+    /// Initializes the mod by applying Harmony patches and adding create new actions.
+    /// </summary>
+    /// <param name="mod">The mod instance to initialize.</param>
+#pragma warning disable IDE0060 // Remove unused parameter
+    private static void Init(ResoniteMod? mod)
+#pragma warning restore IDE0060 // Remove unused parameter
     {
-        DevCreateNewForm.AddAction(path, name, action);
-        menuItems.Add(new KeyValuePair<string, string>(path, name));
-    }
-
-    private static void Init(ResoniteMod modInstance)
-    {
+        harmony.PatchAll();
+        
         foreach (var action in SmallMesh.Actions.Concat(ExtraMesh.Actions).Concat(RadiantUIElement.Actions))
         {
             AddAction(action.Category, action.Label, action.Spawn);
         }
     }
 
+    private static void AddAction(string path, string name, Action<Slot> action)
+    {
+        DevCreateNewForm.AddAction(path, name, action);
+        menuItems.Add(new KeyValuePair<string, string>(path, name));
+    }
+
 #if DEBUG
+    /// <summary>
+    /// Called before hot reload occurs. Removes all menu items and Harmony patches.
+    /// </summary>
     public static void BeforeHotReload()
     {
         try
@@ -60,6 +89,7 @@ public partial class MoreCreateNewMod : ResoniteMod
             {
                 HotReloader.RemoveMenuOption(pair.Key, pair.Value);
             }
+            harmony.UnpatchAll(HarmonyId);
         }
         catch (Exception e)
         {
@@ -67,9 +97,13 @@ public partial class MoreCreateNewMod : ResoniteMod
         }
     }
 
-    public static void OnHotReload(ResoniteMod modInstance)
+    /// <summary>
+    /// Called after hot reload occurs. Re-initializes the mod.
+    /// </summary>
+    /// <param name="mod">The mod instance to re-initialize.</param>
+    public static void OnHotReload(ResoniteMod mod)
     {
-        Init(modInstance);
+        Init(mod);
     }
 #endif
 }
