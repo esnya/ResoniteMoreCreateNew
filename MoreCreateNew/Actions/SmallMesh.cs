@@ -8,24 +8,24 @@ internal sealed class SmallMesh<T> : ISpawn
 {
     public string Category => "3DModel/Small";
     public string Label { get; private set; } = typeof(T).Name.Replace("Mesh", "");
-    private readonly Action<T> Scaler;
+    private readonly Action<T> scaler;
 
     public SmallMesh(Action<T> scaler)
     {
-        Scaler = scaler;
+        this.scaler = scaler;
     }
 
     public void Spawn(Slot slot)
     {
         DevCreateNewForm.SpawnMesh(slot, typeof(T));
-        Scaler(slot.GetComponent<T>());
+        scaler(slot.GetComponent<T>());
     }
 }
 
 internal static class SmallMesh
 {
-    public static readonly ISpawn[] Actions = new ISpawn[]
-    {
+    public static readonly ISpawn[] actions =
+    [
         new SmallMesh<BoxMesh>(m => m.Size.Value *= 0.1f),
         new SmallMesh<CapsuleMesh>(m =>
         {
@@ -57,5 +57,5 @@ internal static class SmallMesh
             m.Vertex1.Position.Value *= 0.1f;
             m.Vertex2.Position.Value *= 0.1f;
         }),
-    };
+    ];
 }

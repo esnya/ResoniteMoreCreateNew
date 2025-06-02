@@ -11,51 +11,50 @@ internal sealed class RadiantUIElement : ISpawn
     public string Category => "Radiant UI";
     public string Label { get; private set; }
 
-    private readonly float2 Size;
-    private readonly Delegate Builder;
-    private readonly bool SetupPanel;
+    private readonly float2 size;
+    private readonly Delegate builder;
+    private readonly bool setupPanel;
 
     public RadiantUIElement(float2 size, LambdaExpression expression, bool setupPanel = false)
     {
-        var callExpression = expression.Body as MethodCallExpression;
-        if (callExpression == null)
+        if (expression.Body is not MethodCallExpression callExpression)
         {
             throw new ArgumentException("Expression must be a method call");
         }
 
-        Builder = expression.Compile();
+        builder = expression.Compile();
         Label = callExpression.Method.Name;
-        Size = size;
-        SetupPanel = setupPanel;
+        this.size = size;
+        this.setupPanel = setupPanel;
     }
 
     public RadiantUIElement(string label, float2 size, Delegate builder, bool setupPanel = false)
     {
         Label = label;
-        Size = size;
-        Builder = builder;
-        SetupPanel = setupPanel;
+        this.size = size;
+        this.builder = builder;
+        this.setupPanel = setupPanel;
     }
 
     public void Spawn(Slot slot)
     {
         slot.LocalScale *= float3.One * 0.001f;
 
-        if (SetupPanel)
+        if (setupPanel)
         {
-            Spawn(RadiantUI_Panel.SetupPanel(slot, Label, Size));
+            Spawn(RadiantUI_Panel.SetupPanel(slot, Label, size));
         }
         else
         {
             var canvas = slot.AttachComponent<Canvas>();
-            canvas.Size.Value = Size;
+            canvas.Size.Value = size;
             slot.AttachComponent<Grabbable>().Scalable.Value = true;
 
             var uiBuilder = new UIBuilder(canvas);
 
             RadiantUI_Constants.SetupDefaultStyle(uiBuilder);
 
-            SpriteProvider spriteProvider = slot.AttachSprite(
+            var spriteProvider = slot.AttachSprite(
                 OfficialAssets.Graphics.UI.Circle.Light_Border.Circle_Phi2
             );
             spriteProvider.Borders.Value = float4.One * 0.5f;
@@ -78,12 +77,12 @@ internal sealed class RadiantUIElement : ISpawn
     private void Spawn(UIBuilder uiBuilder)
     {
         uiBuilder.PushStyle();
-        Builder.DynamicInvoke(uiBuilder, Label);
+        builder.DynamicInvoke(uiBuilder, Label);
         uiBuilder.PopStyle();
     }
 
     private static readonly float2 sq512 = float2.One * 512;
-    private static readonly float2 hori512 = new float2(512, 64);
+    private static readonly float2 hori512 = new(512, 64);
 
     private static void HeaderFooter(
         UIBuilder uiBuilder,
@@ -126,11 +125,6 @@ internal sealed class RadiantUIElement : ISpawn
         );
     }
 
-    private static void FloatSlider(UIBuilder uiBuilder, float height)
-    {
-        uiBuilder.Slider<float>(height);
-    }
-
     private static void VerticalHeader(UIBuilder uiBuilder, string label, float size)
     {
         HeaderFooter(
@@ -157,8 +151,8 @@ internal sealed class RadiantUIElement : ISpawn
         );
     }
 
-    internal static readonly RadiantUIElement[] Actions = new RadiantUIElement[]
-    {
+    internal static readonly RadiantUIElement[] actions =
+    [
         new(sq512, (UIBuilder uiBuilder, string label) => uiBuilder.Arc(label, true)),
         new(hori512, (UIBuilder uiBuilder, string label) => uiBuilder.Button(label)),
         new(
@@ -303,5 +297,5 @@ internal sealed class RadiantUIElement : ISpawn
             sq512,
             (UIBuilder uiBuilder, string label) => uiBuilder.VerticalLayout(0, 0, null, null, null)
         ),
-    };
+    ];
 }

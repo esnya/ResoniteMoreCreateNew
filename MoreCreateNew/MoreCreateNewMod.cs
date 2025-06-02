@@ -19,31 +19,31 @@ namespace MoreCreateNew;
 /// </summary>
 public class MoreCreateNewMod : ResoniteMod
 {
-    private static readonly Assembly Assembly = typeof(MoreCreateNewMod).Assembly;
+    private static readonly Assembly assembly = typeof(MoreCreateNewMod).Assembly;
 
     /// <inheritdoc />
-    public override string Name => Assembly.GetCustomAttribute<AssemblyTitleAttribute>().Title;
+    public override string Name => assembly.GetCustomAttribute<AssemblyTitleAttribute>().Title;
 
     /// <inheritdoc />
     public override string Author =>
-        Assembly.GetCustomAttribute<AssemblyCompanyAttribute>().Company;
+        assembly.GetCustomAttribute<AssemblyCompanyAttribute>().Company;
 
     /// <inheritdoc />
     public override string Version =>
-        Assembly.GetCustomAttribute<AssemblyInformationalVersionAttribute>().InformationalVersion;
+        assembly.GetCustomAttribute<AssemblyInformationalVersionAttribute>().InformationalVersion;
 
     /// <inheritdoc />
     public override string Link =>
-        Assembly
+        assembly
             .GetCustomAttributes<AssemblyMetadataAttribute>()
             .FirstOrDefault(meta => meta.Key == "RepositoryUrl")
             ?.Value ?? string.Empty;
 
-    private static string HarmonyId => $"com.nekometer.esnya.{Assembly.GetName().Name}";
+    private static string HarmonyId => $"com.nekometer.esnya.{assembly.GetName().Name}";
 
     private static readonly Harmony harmony = new(HarmonyId);
     private static readonly List<KeyValuePair<string, string>> menuItems = new(
-        SmallMesh.Actions.Length + ExtraMesh.Actions.Length + RadiantUIElement.Actions.Length
+        SmallMesh.actions.Length + ExtraMesh.actions.Length + RadiantUIElement.actions.Length
     );
 
     /// <inheritdoc />
@@ -68,8 +68,8 @@ public class MoreCreateNewMod : ResoniteMod
 
         foreach (
             var action in SmallMesh
-                .Actions.Concat(ExtraMesh.Actions)
-                .Concat(RadiantUIElement.Actions)
+                .actions.Concat(ExtraMesh.actions)
+                .Concat(RadiantUIElement.actions)
         )
         {
             AddAction(action.Category, action.Label, action.Spawn);

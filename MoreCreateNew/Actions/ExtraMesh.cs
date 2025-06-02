@@ -16,8 +16,8 @@ internal sealed class ExtraMesh<T> : ISpawn
 
 internal static class ExtraMesh
 {
-    public static readonly ISpawn[] Actions = new ISpawn[]
-    {
+    public static readonly ISpawn[] actions =
+    [
         new ExtraMesh<ArrowMesh>(),
         new ExtraMesh<BallisticPathMesh>(),
         new ExtraMesh<BentTubeMesh>(),
@@ -63,5 +63,5 @@ internal static class ExtraMesh
         new ExtraMesh<TubeSpiralMesh>(),
         new ExtraMesh<TubeWireMesh>(),
         new ExtraMesh<WrapperMesh>(),
-    };
+    ];
 }
