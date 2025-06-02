@@ -12,19 +12,16 @@
     Inputs="$(TargetPath)"
     Outputs="$(ResoniteModsPath)\$(TargetFileName);$(ResoniteHotReloadPath)\$(TargetFileName)"
   >
-    <!-- Check if build output exists -->
     <Error
       Text="Build output not found at $(TargetPath). Please run 'dotnet build' first."
       Condition="!Exists('$(TargetPath)')"
     />
-    <!-- Always install to main mods folder -->
     <Message
       Text="Installing $(TargetFileName) to Resonite mods folder: $(ResoniteModsPath)"
       Importance="high"
     />
     <MakeDir Directories="$(ResoniteModsPath)" Condition="!Exists('$(ResoniteModsPath)')" />
     <Copy SourceFiles="$(TargetPath)" DestinationFolder="$(ResoniteModsPath)" />
-    <!-- Additionally install to HotReload folder for Debug builds -->
     <Message
       Text="Installing $(TargetFileName) to Resonite hot reload folder: $(ResoniteHotReloadPath)"
       Importance="high"
