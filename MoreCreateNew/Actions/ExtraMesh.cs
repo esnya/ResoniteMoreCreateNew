@@ -2,7 +2,8 @@
 
 namespace MoreCreateNew.Actions;
 
-internal sealed class ExtraMesh<T> : ISpawn where T : ProceduralMesh
+internal sealed class ExtraMesh<T> : ISpawn
+    where T : ProceduralMesh
 {
     public string Category => "3DModel/Others";
     public string Label { get; private set; } = typeof(T).Name.Replace("Mesh", "");

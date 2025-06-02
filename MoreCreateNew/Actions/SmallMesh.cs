@@ -1,10 +1,10 @@
-﻿using FrooxEngine;
-using System;
+﻿using System;
+using FrooxEngine;
 
 namespace MoreCreateNew.Actions;
 
-
-internal sealed class SmallMesh<T> : ISpawn where T : ProceduralMesh
+internal sealed class SmallMesh<T> : ISpawn
+    where T : ProceduralMesh
 {
     public string Category => "3DModel/Small";
     public string Label { get; private set; } = typeof(T).Name.Replace("Mesh", "");
@@ -22,13 +22,13 @@ internal sealed class SmallMesh<T> : ISpawn where T : ProceduralMesh
     }
 }
 
-
 internal static class SmallMesh
 {
     public static readonly ISpawn[] Actions = new ISpawn[]
     {
         new SmallMesh<BoxMesh>(m => m.Size.Value *= 0.1f),
-        new SmallMesh<CapsuleMesh>(m => {
+        new SmallMesh<CapsuleMesh>(m =>
+        {
             m.Radius.Value *= 0.1f;
             m.Height.Value *= 0.1f;
         }),

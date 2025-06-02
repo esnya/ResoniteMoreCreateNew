@@ -1,13 +1,12 @@
+using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
-using HarmonyLib;
-using ResoniteModLoader;
 using Elements.Core;
 using FrooxEngine;
-using System.Collections.Generic;
-using System;
+using HarmonyLib;
 using MoreCreateNew.Actions;
-
+using ResoniteModLoader;
 #if DEBUG
 using ResoniteHotReloadLib;
 #endif
@@ -43,7 +42,9 @@ public class MoreCreateNewMod : ResoniteMod
     private static string HarmonyId => $"com.nekometer.esnya.{Assembly.GetName().Name}";
 
     private static readonly Harmony harmony = new(HarmonyId);
-    private static readonly List<KeyValuePair<string, string>> menuItems = new(SmallMesh.Actions.Length + ExtraMesh.Actions.Length + RadiantUIElement.Actions.Length);
+    private static readonly List<KeyValuePair<string, string>> menuItems = new(
+        SmallMesh.Actions.Length + ExtraMesh.Actions.Length + RadiantUIElement.Actions.Length
+    );
 
     /// <inheritdoc />
     public override void OnEngineInit()
@@ -64,8 +65,12 @@ public class MoreCreateNewMod : ResoniteMod
 #pragma warning restore IDE0060 // Remove unused parameter
     {
         harmony.PatchAll();
-        
-        foreach (var action in SmallMesh.Actions.Concat(ExtraMesh.Actions).Concat(RadiantUIElement.Actions))
+
+        foreach (
+            var action in SmallMesh
+                .Actions.Concat(ExtraMesh.Actions)
+                .Concat(RadiantUIElement.Actions)
+        )
         {
             AddAction(action.Category, action.Label, action.Spawn);
         }
