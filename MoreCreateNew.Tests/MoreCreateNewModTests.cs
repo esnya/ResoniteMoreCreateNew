@@ -1,6 +1,10 @@
 using System.Linq;
 using System.Reflection;
 using FluentAssertions;
+using System.Collections.Generic;
+using System;
+using FrooxEngine;
+using MoreCreateNew.Actions;
 
 namespace MoreCreateNew.Tests;
 
@@ -67,8 +71,10 @@ public class MoreCreateNewModTests
     private static MethodInfo InitMethod =>
         typeof(MoreCreateNewMod).GetMethod("Init", BindingFlags.NonPublic | BindingFlags.Static)!;
 
-    private static void ResetMenuItems() =>
+    private static void ResetMenuItems()
+    {
         MenuItemsField.SetValue(null, new List<KeyValuePair<string, string>>());
+    }
 
     [Fact]
     public void AddAction_ShouldStoreMenuItem()
@@ -80,7 +86,7 @@ public class MoreCreateNewModTests
         const string name = "Item";
 
         // Act
-        AddActionMethod.Invoke(null, new object?[] { path, name, (Action<Slot>)(_ => { }) });
+        AddActionMethod.Invoke(null, [path, name, (Action<Slot>)(_ => { })]);
 
         // Assert
         var menuItems = (List<KeyValuePair<string, string>>)MenuItemsField.GetValue(null)!;
@@ -97,7 +103,7 @@ public class MoreCreateNewModTests
             SmallMesh.actions.Length + ExtraMesh.actions.Length + RadiantUIElement.actions.Length;
 
         // Act
-        InitMethod.Invoke(null, new object?[] { null });
+        InitMethod.Invoke(null, [null]);
 
         // Assert
         var menuItems = (List<KeyValuePair<string, string>>)MenuItemsField.GetValue(null)!;

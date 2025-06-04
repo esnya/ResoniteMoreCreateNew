@@ -16,6 +16,8 @@
     <PackageReference Include="xunit.v3.runner.inproc.console" />
     <PackageReference Include="Moq" />
     <PackageReference Include="FluentAssertions" />
+    <PackageReference Include="coverlet.collector" />
+    <PackageReference Include="coverlet.msbuild" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\MoreCreateNew\MoreCreateNew.csproj">
