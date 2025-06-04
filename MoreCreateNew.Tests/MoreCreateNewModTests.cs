@@ -1,8 +1,8 @@
+using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using FluentAssertions;
-using System.Collections.Generic;
-using System;
 using FrooxEngine;
 using MoreCreateNew.Actions;
 
@@ -17,6 +17,78 @@ public class MoreCreateNewModTests
         var modCreation = () => new MoreCreateNewMod();
         var mod = modCreation.Should().NotThrow().Subject;
         mod.Should().NotBeNull();
+    }
+
+    [Fact]
+    public void Name_ShouldReturnAssemblyTitle()
+    {
+        // Arrange
+        var mod = new MoreCreateNewMod();
+        var assembly = typeof(MoreCreateNewMod).Assembly;
+        var expectedName = assembly.GetCustomAttribute<AssemblyTitleAttribute>()?.Title;
+
+        // Act
+        var actualName = mod.Name;
+
+        // Assert
+        actualName.Should().Be(expectedName);
+        actualName.Should().NotBeNullOrWhiteSpace();
+    }
+
+    [Fact]
+    public void Author_ShouldReturnAssemblyCompany()
+    {
+        // Arrange
+        var mod = new MoreCreateNewMod();
+        var assembly = typeof(MoreCreateNewMod).Assembly;
+        var expectedAuthor = assembly.GetCustomAttribute<AssemblyCompanyAttribute>()?.Company;
+
+        // Act
+        var actualAuthor = mod.Author;
+
+        // Assert
+        actualAuthor.Should().Be(expectedAuthor);
+        actualAuthor.Should().NotBeNullOrWhiteSpace();
+    }
+
+    [Fact]
+    public void Version_ShouldReturnValidSemanticVersionWithoutHash()
+    {
+        // Arrange
+        var mod = new MoreCreateNewMod();
+
+        // Act
+        var actualVersion = mod.Version;
+
+        // Assert
+        actualVersion.Should().NotBeNullOrWhiteSpace();
+
+        // Should be a valid semantic version without hash
+        actualVersion.Should().MatchRegex(@"^\d+\.\d+\.\d+(-[a-zA-Z0-9\-\.]+)?$",
+            "version should be a valid semantic version without hash (e.g., 1.0.0 or 1.0.0-beta)");
+
+        // Should not contain git hash or commit info
+        actualVersion.Should().NotContain("+", "version should not contain git hash");
+        actualVersion.Should().NotMatch(@"[a-f0-9]{7,40}", "version should not contain git commit hash");
+    }
+
+    [Fact]
+    public void Link_ShouldReturnRepositoryUrl()
+    {
+        // Arrange
+        var mod = new MoreCreateNewMod();
+        var assembly = typeof(MoreCreateNewMod).Assembly;
+        var expectedLink =
+            assembly
+                .GetCustomAttributes<AssemblyMetadataAttribute>()
+                .FirstOrDefault(meta => meta.Key == "RepositoryUrl")
+                ?.Value ?? string.Empty;
+
+        // Act
+        var actualLink = mod.Link;
+
+        // Assert
+        actualLink.Should().Be(expectedLink);
     }
 
     [Fact]

@@ -276,4 +276,68 @@ public class SpawnActionTests
         element.Label.Should().Be("FitContent");
         element.Category.Should().Be("Radiant UI");
     }
+
+    [Fact]
+    public void SmallMesh_SpecificActions_ShouldHaveExpectedLabels()
+    {
+        // Arrange
+        var actions = SmallMesh.actions;
+        var expectedLabels = new[]
+        {
+            "Box",
+            "Capsule",
+            "Cone",
+            "Cylinder",
+            "Grid",
+            "Quad",
+            "Sphere",
+            "Torus",
+            "Triangle",
+        };
+
+        // Act
+        var actualLabels = actions.Select(a => a.Label).ToArray();
+
+        // Assert
+        actualLabels.Should().Contain(expectedLabels);
+        actualLabels.Should().OnlyHaveUniqueItems();
+    }
+
+    [Fact]
+    public void ExtraMesh_SpecificActions_ShouldHaveExpectedLabels()
+    {
+        // Arrange
+        var actions = ExtraMesh.actions;
+        var someExpectedLabels = new[] { "Arrow", "Sphere", "Quad", "Ring", "Cross", "Circle" };
+
+        // Act
+        var actualLabels = actions.Select(a => a.Label).ToArray();
+
+        // Assert
+        actualLabels.Should().Contain(someExpectedLabels);
+        actualLabels.Should().OnlyHaveUniqueItems();
+    }
+
+    [Fact]
+    public void RadiantUIElement_SpecificActions_ShouldHaveExpectedLabels()
+    {
+        // Arrange
+        var actions = RadiantUIElement.actions;
+        var someExpectedLabels = new[]
+        {
+            "Button",
+            "Text",
+            "Image",
+            "Panel",
+            "Checkbox R",
+            "Slider<float>",
+        };
+
+        // Act
+        var actualLabels = actions.Select(a => a.Label).ToArray();
+
+        // Assert
+        actualLabels.Should().Contain(someExpectedLabels);
+        actualLabels.Should().OnlyHaveUniqueItems();
+    }
 }

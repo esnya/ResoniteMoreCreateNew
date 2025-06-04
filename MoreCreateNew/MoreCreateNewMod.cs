@@ -33,7 +33,7 @@ public class MoreCreateNewMod : ResoniteMod
 
     /// <inheritdoc />
     public override string Version =>
-        assembly.GetCustomAttribute<AssemblyVersionAttribute>().Version;
+        assembly.GetCustomAttribute<AssemblyVersionAttribute>()?.Version ?? string.Empty;
 
     /// <inheritdoc />
     public override string Link =>
