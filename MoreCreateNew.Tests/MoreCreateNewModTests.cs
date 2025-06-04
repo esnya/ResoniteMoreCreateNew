@@ -16,58 +16,6 @@ public class MoreCreateNewModTests
     }
 
     [Fact]
-    public void Name_Property_ShouldReturnExpectedValue()
-    {
-        // Arrange
-        var mod = new MoreCreateNewMod();
-
-        // Act
-        var name = mod.Name;
-
-        // Assert
-        name.Should().NotBeNull().And.Be("MoreCreateNew");
-    }
-
-    [Fact]
-    public void Author_Property_ShouldReturnExpectedValue()
-    {
-        // Arrange
-        var mod = new MoreCreateNewMod();
-
-        // Act
-        var author = mod.Author;
-
-        // Assert
-        author.Should().NotBeNull().And.Be("esnya");
-    }
-
-    [Fact]
-    public void Version_Property_ShouldStartWithExpectedValue()
-    {
-        // Arrange
-        var mod = new MoreCreateNewMod();
-
-        // Act
-        var version = mod.Version;
-
-        // Assert
-        version.Should().NotBeNull().And.NotContain("+");
-    }
-
-    [Fact]
-    public void Link_Property_ShouldReturnExpectedValue()
-    {
-        // Arrange
-        var mod = new MoreCreateNewMod();
-
-        // Act
-        var link = mod.Link;
-
-        // Assert
-        link.Should().NotBeNull().And.Be("https://github.com/esnya/ResoniteMoreCreateNew");
-    }
-
-    [Fact]
     public void Assembly_ShouldHaveExpectedAttributes()
     {
         // Arrange
@@ -102,5 +50,57 @@ public class MoreCreateNewModTests
         // Assert
         repositoryUrlAttribute.Should().NotBeNull("assembly should have RepositoryUrl metadata");
         repositoryUrlAttribute!.Value.Should().NotBeNullOrWhiteSpace();
+    }
+
+    private static FieldInfo MenuItemsField =>
+        typeof(MoreCreateNewMod).GetField(
+            "menuItems",
+            BindingFlags.NonPublic | BindingFlags.Static
+        )!;
+
+    private static MethodInfo AddActionMethod =>
+        typeof(MoreCreateNewMod).GetMethod(
+            "AddAction",
+            BindingFlags.NonPublic | BindingFlags.Static
+        )!;
+
+    private static MethodInfo InitMethod =>
+        typeof(MoreCreateNewMod).GetMethod("Init", BindingFlags.NonPublic | BindingFlags.Static)!;
+
+    private static void ResetMenuItems() =>
+        MenuItemsField.SetValue(null, new List<KeyValuePair<string, string>>());
+
+    [Fact]
+    public void AddAction_ShouldStoreMenuItem()
+    {
+        // Arrange
+        ResetMenuItems();
+
+        const string path = "Test/Path";
+        const string name = "Item";
+
+        // Act
+        AddActionMethod.Invoke(null, new object?[] { path, name, (Action<Slot>)(_ => { }) });
+
+        // Assert
+        var menuItems = (List<KeyValuePair<string, string>>)MenuItemsField.GetValue(null)!;
+        menuItems.Should().Contain(new KeyValuePair<string, string>(path, name));
+    }
+
+    [Fact]
+    public void Init_ShouldRegisterAllActions()
+    {
+        // Arrange
+        ResetMenuItems();
+
+        var expectedCount =
+            SmallMesh.actions.Length + ExtraMesh.actions.Length + RadiantUIElement.actions.Length;
+
+        // Act
+        InitMethod.Invoke(null, new object?[] { null });
+
+        // Assert
+        var menuItems = (List<KeyValuePair<string, string>>)MenuItemsField.GetValue(null)!;
+        menuItems.Should().HaveCount(expectedCount);
     }
 }

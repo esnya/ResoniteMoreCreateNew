@@ -1,7 +1,10 @@
 using System;
 using System.Linq;
+using System.Linq.Expressions;
+using Elements.Core;
 using FluentAssertions;
 using FrooxEngine;
+using FrooxEngine.UIX;
 using MoreCreateNew.Actions;
 
 namespace MoreCreateNew.Tests.Actions;
@@ -235,5 +238,42 @@ public class SpawnActionTests
         // Verify that the "Mesh" suffix was properly removed
         arrowAction!.Label.Should().NotEndWith("Mesh");
         sphereAction!.Label.Should().NotEndWith("Mesh");
+    }
+
+    [Theory]
+    [InlineData("Box")]
+    [InlineData("Capsule")]
+    [InlineData("Sphere")]
+    public void SmallMesh_Actions_ShouldContainExpectedLabels(string label)
+    {
+        // Act
+        var action = SmallMesh.actions.FirstOrDefault(a => a.Label == label);
+
+        // Assert
+        action.Should().NotBeNull();
+        action!.Category.Should().Be("3DModel/Small");
+    }
+
+    [Fact]
+    public void ExtraMesh_NestedGenericLabel_ShouldFormatCorrectly()
+    {
+        // Arrange & Act
+        var action = new ExtraMesh<StandaloneRectMesh<AudioSourceWaveformMesh>>();
+
+        // Assert
+        action.Label.Should().Be("StandaloneRectMesh<AudioSourceWaveform>");
+        action.Category.Should().Be("3DModel/Others");
+    }
+
+    [Fact]
+    public void RadiantUIElement_ExpressionConstructor_ShouldSetLabel()
+    {
+        // Arrange
+        Expression<Action<UIBuilder>> expr = ui => ui.FitContent();
+        var element = new RadiantUIElement(float2.One, expr);
+
+        // Assert
+        element.Label.Should().Be("FitContent");
+        element.Category.Should().Be("Radiant UI");
     }
 }
