@@ -10,7 +10,7 @@
   <Target
     Name="Install"
     Inputs="$(TargetPath)"
-    Outputs="$(ResoniteModsPath)\$(TargetFileName);$(ResoniteHotReloadPath)\$(TargetFileName)"
+    Outputs="$(ResoniteModsPath)/$(TargetFileName);$(ResoniteHotReloadPath)/$(TargetFileName)"
   >
     <Error
       Text="Build output not found at $(TargetPath). Please run 'dotnet build' first."

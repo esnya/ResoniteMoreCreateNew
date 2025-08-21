@@ -22,15 +22,20 @@ public class MoreCreateNewMod : ResoniteMod
     private static readonly Assembly assembly = typeof(MoreCreateNewMod).Assembly;
 
     /// <inheritdoc />
-    public override string Name => assembly.GetCustomAttribute<AssemblyTitleAttribute>().Title;
+    public override string Name =>
+        assembly.GetCustomAttribute<AssemblyTitleAttribute>()?.Title
+        ?? assembly.GetName().Name
+        ?? string.Empty;
 
     /// <inheritdoc />
     public override string Author =>
-        assembly.GetCustomAttribute<AssemblyCompanyAttribute>().Company;
+        assembly.GetCustomAttribute<AssemblyCompanyAttribute>()?.Company ?? string.Empty;
 
     /// <inheritdoc />
     public override string Version =>
-        assembly.GetCustomAttribute<AssemblyInformationalVersionAttribute>().InformationalVersion;
+        assembly.GetCustomAttribute<AssemblyInformationalVersionAttribute>()?.InformationalVersion
+        ?? assembly.GetName().Version?.ToString()
+        ?? string.Empty;
 
     /// <inheritdoc />
     public override string Link =>

@@ -7,7 +7,8 @@ internal sealed class SmallMesh<T> : ISpawn
     where T : ProceduralMesh
 {
     public string Category => "3DModel/Small";
-    public string Label { get; private set; } = typeof(T).Name.Replace("Mesh", "");
+    public string Label { get; private set; } =
+        typeof(T).Name.Replace("Mesh", string.Empty, StringComparison.Ordinal);
     private readonly Action<T> scaler;
 
     public SmallMesh(Action<T> scaler)

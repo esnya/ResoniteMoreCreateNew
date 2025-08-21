@@ -6,7 +6,8 @@ internal sealed class ExtraMesh<T> : ISpawn
     where T : ProceduralMesh
 {
     public string Category => "3DModel/Others";
-    public string Label { get; private set; } = typeof(T).Name.Replace("Mesh", "");
+    public string Label { get; private set; } =
+        typeof(T).Name.Replace("Mesh", string.Empty, System.StringComparison.Ordinal);
 
     public void Spawn(Slot slot)
     {

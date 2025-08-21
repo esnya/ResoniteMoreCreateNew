@@ -13,7 +13,7 @@
   </PropertyGroup>
   <!-- Build Properties -->
   <PropertyGroup>
-    <TargetFramework>net472</TargetFramework>
+    <TargetFramework>net9.0</TargetFramework>
     <LangVersion>latest</LangVersion>
     <Nullable>enable</Nullable>
     <DebugType Condition="'$(Configuration)'=='Debug'">embedded</DebugType>
@@ -31,20 +31,20 @@
   <!-- Resonite Path Discovery -->
   <PropertyGroup Condition="'$(ResonitePath)'==''">
     <!-- Default to local folder -->
-    <ResonitePath>$([System.IO.Path]::Combine('$(MSBuildThisFileDirectory)', 'Resonite'))</ResonitePath>
+    <ResonitePath>$(MSBuildThisFileDirectory)/Resonite</ResonitePath>
     <!-- Windows Steam path -->
     <ResonitePath
-      Condition="'$(OS)'=='Windows_NT' AND Exists('C:\Program Files (x86)\Steam\steamapps\common\Resonite\')"
-      >C:\Program Files (x86)\Steam\steamapps\common\Resonite</ResonitePath
+      Condition="'$(OS)'=='Windows_NT' AND Exists('C:/Program Files (x86)/Steam/steamapps/common/Resonite/')"
+      >C:/Program Files (x86)/Steam/steamapps/common/Resonite</ResonitePath
     >
-    <!-- Linux Steam path -->
-    <ResonitePath
-      Condition="'$(OS)'!='Windows_NT' AND Exists('$(USERPROFILE)\.steam\steam\steamapps\common\Resonite\')"
-      >$(USERPROFILE)\.steam\steam\steamapps\common\Resonite</ResonitePath
-    >
+    <!-- Linux Steam paths -->
     <ResonitePath
       Condition="'$(OS)'!='Windows_NT' AND Exists('$(HOME)/.steam/steam/steamapps/common/Resonite/')"
       >$(HOME)/.steam/steam/steamapps/common/Resonite</ResonitePath
+    >
+    <ResonitePath
+      Condition="'$(OS)'!='Windows_NT' AND Exists('$(HOME)/.local/share/Steam/steamapps/common/Resonite/')"
+      >$(HOME)/.local/share/Steam/steamapps/common/Resonite</ResonitePath
     >
   </PropertyGroup>
   <!-- Normalize ResonitePath -->
@@ -53,31 +53,34 @@
   </PropertyGroup>
   <!-- Derived Resonite Paths -->
   <PropertyGroup>
-    <ResoniteManagedPath>$([System.IO.Path]::Combine('$(ResonitePath)', 'Resonite_Data', 'Managed'))</ResoniteManagedPath>
-    <ResoniteModsPath>$([System.IO.Path]::Combine('$(ResonitePath)', 'rml_mods'))</ResoniteModsPath>
-    <ResoniteHotReloadPath>$([System.IO.Path]::Combine('$(ResonitePath)', 'rml_mods', 'HotReloadMods'))</ResoniteHotReloadPath>
-    <ResoniteLibsPath>$([System.IO.Path]::Combine('$(ResonitePath)', 'rml_libs'))</ResoniteLibsPath>
+    <ResoniteManagedPath>$(ResonitePath)Resonite_Data/Managed</ResoniteManagedPath>
+    <ResoniteModsPath>$(ResonitePath)rml_mods</ResoniteModsPath>
+    <ResoniteHotReloadPath>$(ResonitePath)rml_mods/HotReloadMods</ResoniteHotReloadPath>
+    <ResoniteLibsPath>$(ResonitePath)rml_libs</ResoniteLibsPath>
   </PropertyGroup>
   <!-- Resonite References -->
   <ItemGroup>
     <Reference Include="ResoniteModLoader">
-      <HintPath>$([System.IO.Path]::Combine('$(ResonitePath)', 'Libraries', 'ResoniteModLoader.dll'))</HintPath>
+      <HintPath>$(ResonitePath)Libraries/ResoniteModLoader.dll</HintPath>
       <Private>false</Private>
     </Reference>
     <Reference Include="HarmonyLib">
-      <HintPath>$([System.IO.Path]::Combine('$(ResoniteLibsPath)', '0Harmony.dll'))</HintPath>
+      <HintPath>$(ResoniteLibsPath)/0Harmony.dll</HintPath>
+      <HintPath Condition="Exists('$(ResonitePath)0Harmony.dll')"
+        >$(ResonitePath)0Harmony.dll</HintPath
+      >
       <Private>false</Private>
     </Reference>
     <Reference Include="FrooxEngine">
-      <HintPath>$([System.IO.Path]::Combine('$(ResoniteManagedPath)', 'FrooxEngine.dll'))</HintPath>
+      <HintPath>$(ResonitePath)FrooxEngine.dll</HintPath>
       <Private>false</Private>
     </Reference>
     <Reference Include="Elements.Core">
-      <HintPath>$([System.IO.Path]::Combine('$(ResoniteManagedPath)', 'Elements.Core.dll'))</HintPath>
+      <HintPath>$(ResonitePath)Elements.Core.dll</HintPath>
       <Private>false</Private>
     </Reference>
     <Reference Include="ResoniteHotReloadLib" Condition="'$(Configuration)'=='Debug'">
-      <HintPath>$([System.IO.Path]::Combine('$(ResoniteLibsPath)', 'ResoniteHotReloadLib.dll'))</HintPath>
+      <HintPath>$(ResoniteLibsPath)/ResoniteHotReloadLib.dll</HintPath>
       <Private>false</Private>
     </Reference>
   </ItemGroup>
